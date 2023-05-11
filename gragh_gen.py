@@ -66,8 +66,8 @@ class graph():
         if not os.path.exists(self.graph_path):
             os.makedirs(self.graph_path)
 
-        pivot = self.df.pivot_table(index="ID", columns='code', values='Marks')
-        ax = pivot.plot(kind='box', figsize=fig_size)
+        fig, ax = plt.subplots(figsize=fig_size)
+        sns.boxplot(x="code", y="Marks", data=self.df, ax=ax, palette="rainbow")
         ax.set_title('Quartiles for ' + self.name)
         ax.set_xlabel('Code')
         ax.set_ylabel('Marks')
