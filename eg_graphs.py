@@ -9,5 +9,5 @@ df.rename(columns={'ID NO':'ID'}, inplace=True)
 df.dropna(subset=['Marks'], inplace=True)
 print(df.head())
 
-g = graph('EG Midsem', df, 75)
+g = graph('EG Midsem', df, 70)
 g.gen_all()
