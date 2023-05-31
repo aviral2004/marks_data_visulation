@@ -9,9 +9,10 @@ sns.set_theme()
 
 
 class graph():
-    def __init__(self, name, data, max_marks, path='./') -> None:
+    def __init__(self, name, data, max_marks, path='./', codes=False) -> None:
         self.df = pd.DataFrame(data)
-        self.df['code'] = self.df['ID'].str[4:6]
+        if codes == False:
+            self.df['code'] = self.df['ID'].str[4:6]
         self.df = self.df[['ID', 'Marks', 'code']]
 
         self.name = name
@@ -19,6 +20,7 @@ class graph():
         self.fig_name = name.lower().replace(' ', '_')
         self.graph_path = path + 'graphs/' + self.fig_name + '/'
         self.percentiles_path = path + 'percentiles/' + self.fig_name + '/'
+
 
     def gen_hist(self, fig_size=(12, 8), hist_path=None):
         if not os.path.exists(self.graph_path):
@@ -68,6 +70,10 @@ class graph():
 
         fig, ax = plt.subplots(figsize=fig_size)
         sns.boxplot(x="code", y="Marks", data=self.df, ax=ax, palette="rainbow")
+        # add a horizontal line at the median
+        median = self.df['Marks'].median()
+        plt.axhline(median, color='g', linestyle='dashed', linewidth=2)
+        ax.text(0.85, median/100 + 0.03, f"Median: {median:.2f}", transform=ax.transAxes, color='g')
         ax.set_title('Quartiles for ' + self.name)
         ax.set_xlabel('Code')
         ax.set_ylabel('Marks')

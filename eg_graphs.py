@@ -1,4 +1,4 @@
-from gragh_gen import graph
+from graph_gen import graph
 
 import matplotlib.pyplot as plt
 import pandas as pd

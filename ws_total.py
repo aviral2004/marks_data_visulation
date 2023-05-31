@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from gragh_gen import graph
+from graph_gen import graph
 
 compre = pd.read_csv('./data/wp_compre.csv')
 compre['code'] = compre['ID'].str[4:6]
