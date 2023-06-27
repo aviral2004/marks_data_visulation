@@ -22,7 +22,7 @@ class graph():
         self.percentiles_path = path + 'percentiles/' + self.fig_name + '/'
 
 
-    def gen_hist(self, fig_size=(12, 8), hist_path=None):
+    def gen_hist(self, fig_size=(12, 8), hist_path=None, hist_ticks=20):
         if not os.path.exists(self.graph_path):
             os.makedirs(self.graph_path)
 
@@ -31,6 +31,7 @@ class graph():
         ax.set_xlabel('Marks')
         ax.set_ylabel('Frequency')
         ax.set_title('Marks Distribution for ' + self.name)
+        ax.set_xticks(range(0, self.max_marks + 1, hist_ticks))
 
         path = self.graph_path if hist_path is None else hist_path
         ax.figure.savefig(path + self.fig_name + '_hist' +
