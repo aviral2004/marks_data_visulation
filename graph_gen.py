@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy import stats
 import os
+from tabulate import tabulate
 
 import seaborn as sns
 sns.set_theme()
@@ -87,16 +88,44 @@ class graph():
         if not os.path.exists(self.percentiles_path):
             os.makedirs(self.percentiles_path)
 
-        # empty file
-        open(self.percentiles_path + self.fig_name + '.txt', 'w').close()
+        filename = self.percentiles_path + self.fig_name + '_marks.txt'
 
-        with open(self.percentiles_path + self.fig_name + '.txt', 'a') as f:
+        # empty file
+        open(filename, 'w').close()
+
+        with open(filename, 'a') as f:
             for i in range(1, self.max_marks + 1):
                 p = stats.percentileofscore(self.df["Marks"], i, kind='weak')
                 f.write(f"marks: {i} -> {p}\n")
+
+    def gen_ranks(self):
+        if not os.path.exists(self.percentiles_path):
+            os.makedirs(self.percentiles_path)
+
+        filename = self.percentiles_path + self.fig_name + '_ranks.txt'
+
+        copy_df = self.df.sort_values(by='ID', key = lambda id: id.str[-5:-1].astype(int))
+        
+        # add a column for rank
+        copy_df['rank'] = copy_df['Marks'].rank(ascending=False)
+
+        # truncate rank to 0 decimal places
+        copy_df['rank'] = copy_df['rank'].apply(lambda x: f"{x:.0f}")
+
+        # add a column for percentile
+        copy_df['percentile'] = copy_df['Marks'].apply(lambda x: stats.percentileofscore(self.df["Marks"], x, kind='weak'))
+
+        number_of_students = len(copy_df)
+
+        copy_df = copy_df[['ID', 'rank', 'percentile']]
+
+        with open(filename, 'w') as f:
+            data = tabulate(copy_df, headers=['ID', f'Rank ({number_of_students})', 'Percentile'], tablefmt='psql', showindex=False)
+            f.write(data)
 
     def gen_all(self):
         self.gen_hist()
         self.gen_percentile_plot()
         self.gen_quartiles()
         self.gen_percentiles()
+        self.gen_ranks()
