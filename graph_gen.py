@@ -117,14 +117,14 @@ class graph():
 
         # add a column called av_plus which is the difference between the marks and the average marks
         copy_df['av_plus'] = copy_df['Marks'] - copy_df['Marks'].mean()
-        copy_df['av_plus'] = copy_df['av_plus'].apply(lambda x: f"{x:.2f}")
+        copy_df['av_plus'] = copy_df['av_plus'].apply(lambda x: f"{x:+.2f}")
 
         number_of_students = len(copy_df)
 
         copy_df = copy_df[['ID', 'rank', 'percentile', 'av_plus']]
 
         with open(filename, 'w') as f:
-            data = tabulate(copy_df, headers=['ID', f'Rank ({number_of_students})', 'Percentile', 'Av Plus'], tablefmt='psql', showindex=False)
+            data = tabulate(copy_df, headers=['ID', f'Rank ({number_of_students})', 'Percentile', 'Av Plus'], tablefmt='psql', showindex=False, disable_numparse=True)
             f.write(data)
 
     def gen_all(self):
