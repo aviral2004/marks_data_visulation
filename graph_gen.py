@@ -75,7 +75,7 @@ class graph():
         # add a horizontal line at the median
         median = self.df['Marks'].median()
         plt.axhline(median, color='g', linestyle='dashed', linewidth=2)
-        ax.text(0.85, median/100 + 0.03, f"Median: {median:.2f}", transform=ax.transAxes, color='g')
+        ax.text(0.85, median/self.max_marks, f"Median: {median:.2f}", transform=ax.transAxes, color='g')
         ax.set_title('Quartiles for ' + self.name)
         ax.set_xlabel('Code')
         ax.set_ylabel('Marks')
