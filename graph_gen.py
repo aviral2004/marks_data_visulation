@@ -98,13 +98,16 @@ class graph():
                 p = stats.percentileofscore(self.df["Marks"], i, kind='weak')
                 f.write(f"marks: {i} -> {p}\n")
 
-    def gen_ranks(self):
+    def gen_ranks(self, numbers=False):
         if not os.path.exists(self.percentiles_path):
             os.makedirs(self.percentiles_path)
 
         filename = self.percentiles_path + self.fig_name + '_ranks.txt'
 
-        copy_df = self.df.sort_values(by='ID', key = lambda id: id.str[-5:-1].astype(int))
+        if not numbers:
+            copy_df = self.df.sort_values(by='ID', key = lambda id: id.str[-5:-1].astype(int))
+        else:
+            copy_df = self.df.sort_values(by='ID')
         
         # add a column for rank
         copy_df['rank'] = copy_df['Marks'].rank(ascending=False)
